@@ -1,0 +1,14 @@
+rules:
+  - id: llm-secret-in-prompt
+    message: Secret-like identifier interpolated into an LLM prompt (OWASP LLM06).
+    languages: [python]
+    severity: ERROR
+    metadata:
+      owasp: "LLM06:2025 Sensitive Information Disclosure"
+    patterns:
+      - pattern-either:
+          - pattern: f"...{$X}..."
+          - pattern: "...".format(..., $X, ...)
+      - metavariable-regex:
+          metavariable: $X
+          regex: (?i).*(api_key|password|secret|token|authorization).*
