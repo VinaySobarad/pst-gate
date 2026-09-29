@@ -158,6 +158,29 @@ Empty report must pass: [`examples/byo-sarif`](examples/byo-sarif) (CI uses this
 
 ---
 
+## Red vs green (what GitHub shows)
+
+The Actions tab is **red** when `pst-gate decide` exits **1** (do not merge). It is **green** when it exits **0**. Scanners themselves stay fail-open; only the gate paints the check.
+
+This repository already did both, on a real bucket in [`examples/consumer/infra/s3.tf`](examples/consumer/infra/s3.tf):
+
+| | What happened | What you see |
+|--|----------------|----------------|
+| **Red** | Trivy reported High `AWS-0132`: bucket used AES256, not a customer KMS key. Empty baseline → **new High → fail**. | [CI run (fail)](https://github.com/VinaySobarad/pst-gate/actions/runs/36541843690) — `tests` green, `example-app` red, report: `s3.tf` / `AWS-0132` / why **new**. |
+| **Green** | Encryption switched to `aws:kms` + a rotating CMK. Same scanners, no baseline hide. Gate **pass**. | [CI run (success)](https://github.com/VinaySobarad/pst-gate/actions/runs/36546803463) — `tests` and `example-app / ship-or-dont` both green. |
+
+Same idea **without GitHub** (checked-in SARIF):
+
+| Command | Color | Exit |
+|---------|--------|------|
+| `examples/triage/new-high` | red | 1 |
+| `examples/triage/in-baseline` (same High, already listed) | green | 0 |
+| `examples/triage/kev-in-baseline` (KEV, even in baseline) | red | 1 |
+
+Live badge for this repo: [![ci](https://github.com/VinaySobarad/pst-gate/actions/workflows/ci.yml/badge.svg)](https://github.com/VinaySobarad/pst-gate/actions/workflows/ci.yml)
+
+---
+
 ## Put it on GitHub (your other repo)
 
 Pin a **tag or commit SHA** (`@v1`). Do not use `@main` (it moves).
