@@ -1,0 +1,32 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "trivy",
+          "rules": [{"id": "CVE-2023-11111"}]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CVE-2023-11111",
+          "level": "error",
+          "message": {"text": "requests (2.0.0)"},
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {"uri": "requirements.txt"},
+                "region": {"startLine": 10}
+              }
+            }
+          ],
+          "properties": {
+            "security-severity": "9.1",
+            "package": "requests"
+          }
+        }
+      ]
+    }
+  ]
+}

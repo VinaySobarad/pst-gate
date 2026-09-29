@@ -1,0 +1,11 @@
+# Ship / don't-ship. New High/Critical fail. Exceptions need owner + expiry.
+# CISA KEV in reachable/shipped code fails even if the fingerprint is in baseline.
+fail_on: high
+ignore_unreachable_sca: true
+annotate_ai_touch: true
+block_kev: true
+sla_days:
+  critical: 7
+  high: 14
+  medium: 30
+  low: 90
