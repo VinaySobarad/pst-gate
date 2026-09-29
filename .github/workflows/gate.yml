@@ -140,12 +140,15 @@ jobs:
           fi
 
       - name: Snyk (optional)
-        if: ${{ secrets.SNYK_TOKEN != '' }}
         continue-on-error: true
         working-directory: ${{ inputs.scan-path }}
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
+          if [ -z "$SNYK_TOKEN" ]; then
+            echo "SNYK_TOKEN not set; skipping Snyk"
+            exit 0
+          fi
           npm install -g snyk
           snyk test --sarif-file-output="$GITHUB_WORKSPACE/reports/snyk.sarif" || true
 
