@@ -21,4 +21,5 @@ def test_merge_two_runs(tmp_path: Path):
         package="x",
     )
     merged = merge_sarif_files([tmp_path / "a.sarif", tmp_path / "b.sarif"])
-    assert len(merged["runs"]) == 2
+    assert len(merged["runs"]) == 1
+    assert len(merged["runs"][0]["results"]) == 2
